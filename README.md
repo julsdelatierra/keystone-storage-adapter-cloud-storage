@@ -26,6 +26,19 @@ var storage = new keystone.Storage({
 });
 ```
 
+Schema options:
+
+* filename
+* size
+* mimetype
+* path
+* originalname
+* url
+* bucket
+* etag
+* md5
+* storageClass
+
 Then use it as the storage provider for a File field:
 
 ```js

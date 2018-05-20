@@ -35,16 +35,16 @@ CloudStorageAdapter.compatibilityLevel = 1
 
 CloudStorageAdapter.SCHEMA_TYPES = {
   filename: String,
-  bucket: String,
-  path: String,
-  etag: String
+  originalname: String,
+  mimetype: String,
+  url: String
 }
 
 CloudStorageAdapter.SCHEMA_FIELD_DEFAULTS = {
   filename: true,
-  bucket: false,
-  path: false,
-  etag: false
+  originalname: true,
+  mimetype: true,
+  url: true
 }
 
 // Return a reserved client for file if it belongs
