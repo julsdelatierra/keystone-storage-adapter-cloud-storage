@@ -113,22 +113,8 @@ CloudStorageAdapter.prototype.uploadFile = function (file, callback) {
   })
 }
 
-CloudStorageAdapter.prototype.getFileURL = async function (file) {
-  let url = null
-
-  const promise = this._clientForFile(file)
-                    .bucket(file.bucket)
-                    .file(this._resolveRemoteFilename(file))
-
-  try {
-    const result = await promise.getMetadata()
-    url = result[0].mediaLink
-  } catch (error) {
-    console.error(error)
-    throw Error('Cloud Storage cannot provide a mediaLink for resource.')
-  }
-
-  return url
+CloudStorageAdapter.prototype.getFileURL = function (file) {
+  return file.url
 }
 
 CloudStorageAdapter.prototype.removeFile = function (file, callback) {
