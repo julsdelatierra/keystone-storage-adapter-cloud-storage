@@ -89,8 +89,10 @@ CloudStorageAdapter.prototype.uploadFile = function (file, callback) {
     debug('Uploading file %s', filename)
     self.client
       .bucket(self.options.bucket)
-      .upload(localpath, uploadOptions, function (err, {metadata}) {
+      .upload(localpath, uploadOptions, function (err, response) {
         if (err) return callback(err)
+
+        const metadata = response.metadata || {}
 
         const fileData = {
           filename: filename,
