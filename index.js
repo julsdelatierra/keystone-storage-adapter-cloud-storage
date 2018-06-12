@@ -12,7 +12,8 @@ const pathlib = require('path')
 
 const DEFAULT_OPTIONS = {
   keyFilename: process.env.CLOUD_STORAGE_KEY_FILENAME,
-  generateFilename: nameFunctions.randomFilename
+  generateFilename: nameFunctions.randomFilename,
+  uniqueFilename: true
 }
 
 function CloudStorageAdapter (options, schema) {
@@ -79,14 +80,18 @@ CloudStorageAdapter.prototype.uploadFile = function (file, callback) {
 
     // Relative path inside cloud storage bucket.
     file.path = self.options.path
-    file.filename = filename
+    if (self.options.uniqueFilename) {
+      file.filename = filename
+    } else {
+      file.filename = file.originalname
+    }
     const destpath = self._resolveRemoteFilename(file)
 
     const uploadOptions = Object.assign({}, self.options.uploadOptions, {
       destination: destpath
     })
 
-    debug('Uploading file %s', filename)
+    debug('Uploading file %s', file.filename)
     self.client
       .bucket(self.options.bucket)
       .upload(localpath, uploadOptions, function (err, response) {
@@ -95,7 +100,7 @@ CloudStorageAdapter.prototype.uploadFile = function (file, callback) {
         const metadata = response.metadata || {}
 
         const fileData = {
-          filename: filename,
+          filename: file.filename,
           size: metadata.size,
           mimetype: metadata.contentType,
           path: self.options.path,
